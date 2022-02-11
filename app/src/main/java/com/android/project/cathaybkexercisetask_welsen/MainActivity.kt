@@ -6,7 +6,9 @@ import androidx.fragment.app.add
 import androidx.fragment.app.commit
 import com.android.project.cathaybkexercisetask_welsen.databinding.ActivityMainBinding
 import com.android.project.cathaybkexercisetask_welsen.ui.user_list.UserListFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
