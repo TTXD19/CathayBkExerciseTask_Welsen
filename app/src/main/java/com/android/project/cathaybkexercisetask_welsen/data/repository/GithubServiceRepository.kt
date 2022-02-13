@@ -22,6 +22,12 @@ class GithubServiceRepository @Inject constructor(
     override fun getUserDetail(userName: String, userDetailCallback: IGithubServiceRepository.UserDetailCallback) {
         githubRemoteDataSource.getUserData(userName = userName)
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribeBy { userDetailCallback.onGetUserDetail(data = it) }
+            .mapToResult()
+            .subscribeBy { userDetailCallback.onGetUserDetail(resultData = it) }
+    }
+
+    private fun <T> Single<T>.mapToResult(): Single<DataResult<T>> {
+        return map<DataResult<T>> { DataResult.Success(it) }
+            .onErrorReturn { DataResult.Failure() }
     }
 }

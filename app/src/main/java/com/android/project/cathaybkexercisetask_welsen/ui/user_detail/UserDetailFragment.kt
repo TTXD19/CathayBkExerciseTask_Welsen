@@ -6,9 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
-import com.android.project.cathaybkexercisetask_welsen.R
 import com.android.project.cathaybkexercisetask_welsen.data.model.UserDetailModel
 import com.android.project.cathaybkexercisetask_welsen.databinding.FragmentUserDetailBinding
 import com.bumptech.glide.Glide
@@ -23,6 +21,8 @@ class UserDetailFragment : DialogFragment(), UserDetailContract.IUserDetailView 
     @Inject
     lateinit var userDetailPresenter: UserDetailPresenter
 
+    private var userName: String? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -33,9 +33,15 @@ class UserDetailFragment : DialogFragment(), UserDetailContract.IUserDetailView 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val name = requireArguments().getString("userName")
-        name?.also { userDetailPresenter.getUserDetail(userName = it, view = this) }
+        userName = requireArguments().getString("userName")
+        updateLoadingVisibility(isVisible = true)
+        initUserData()
+        initBtnRetry()
         initCloseButton()
+    }
+
+    private fun initUserData() {
+        userName?.also { userDetailPresenter.getUserDetail(userName = it, view = this) }
     }
 
     private fun initCloseButton() {
@@ -55,5 +61,40 @@ class UserDetailFragment : DialogFragment(), UserDetailContract.IUserDetailView 
         binding.tvUserLink.text = userDetail.userBlogSite
         context?.also { Glide.with(it).load(userDetail.userImageUrl).into(binding.imageUser) }
         binding.cardViewStaff.isVisible = userDetail.isUserSiteAdmin()
+
+        updateUserDetailsVisibility(isVisible = true)
+        updateLoadingVisibility(isVisible = false)
+        updateErrorMessageVisibility(isVisible = false)
+        updateBtnRetryVisibility(isVisible = false)
+    }
+
+    override fun onGetUserDetailFailed() {
+        updateUserDetailsVisibility(isVisible = false)
+        updateLoadingVisibility(isVisible = false)
+        updateErrorMessageVisibility(isVisible = true)
+        updateBtnRetryVisibility(isVisible = true)
+    }
+
+    private fun updateUserDetailsVisibility(isVisible: Boolean) {
+        binding.clUserDetails.isVisible = isVisible
+    }
+
+    private fun updateLoadingVisibility(isVisible: Boolean) {
+        binding.progressBar.isVisible = isVisible
+    }
+
+    private fun updateErrorMessageVisibility(isVisible: Boolean) {
+        binding.tvErrorMessage.isVisible = isVisible
+    }
+
+    private fun initBtnRetry() {
+        binding.btnRetry.setOnClickListener {
+            updateLoadingVisibility(isVisible = true)
+            initUserData()
+        }
+    }
+
+    private fun updateBtnRetryVisibility(isVisible: Boolean) {
+        binding.btnRetry.isVisible = isVisible
     }
 }

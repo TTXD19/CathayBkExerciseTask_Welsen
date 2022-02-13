@@ -9,5 +9,6 @@ class UserDetailContract {
 
     interface IUserDetailView {
         fun onGetUserDetail(userDetail: UserDetailModel)
+        fun onGetUserDetailFailed()
     }
 }

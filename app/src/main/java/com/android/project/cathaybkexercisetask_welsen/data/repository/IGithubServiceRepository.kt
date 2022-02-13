@@ -12,7 +12,7 @@ interface IGithubServiceRepository {
     ): Single<List<UserListModel>>
 
     interface UserDetailCallback {
-        fun onGetUserDetail(data: UserDetailModel)
+        fun onGetUserDetail(resultData: DataResult<UserDetailModel>)
     }
 
     fun getUserDetail(
