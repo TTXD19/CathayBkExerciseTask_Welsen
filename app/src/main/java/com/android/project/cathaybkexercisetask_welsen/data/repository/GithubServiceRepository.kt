@@ -13,8 +13,14 @@ class GithubServiceRepository @Inject constructor(
         perPage: Int,
         userListCallback: IGithubServiceRepository.UserListCallback
     ) {
-        githubRemoteDataSource.getUserData(startFrom = startFrom, perPage = perPage)
+        githubRemoteDataSource.getUserListData(startFrom = startFrom, perPage = perPage)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy { userListCallback.onGetResult(list = it) }
+    }
+
+    override fun getUserDetail(userName: String, userDetailCallback: IGithubServiceRepository.UserDetailCallback) {
+        githubRemoteDataSource.getUserData(userName = userName)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy { userDetailCallback.onGetUserDetail(data = it) }
     }
 }
