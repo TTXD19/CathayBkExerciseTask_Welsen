@@ -6,12 +6,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.android.project.cathaybkexercisetask_welsen.data.model.UserListModel
 import com.android.project.cathaybkexercisetask_welsen.databinding.FragmentUserListBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class UserListFragment : Fragment() {
+class UserListFragment : Fragment(), UserListContract.IUserListView {
 
     private lateinit var binding: FragmentUserListBinding
 
@@ -29,9 +30,10 @@ class UserListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        userListPresenter.getUserList(startFrom = 0, perPage = 20, view = this)
+    }
 
-        userListPresenter.getUserList(startFrom = 0, perPage = 20).observe(viewLifecycleOwner) {
-            Log.d("testData", "Success")
-        }
+    override fun onGetUserList(userList: List<UserListModel>) {
+        Log.d("TestData", "successUI")
     }
 }
