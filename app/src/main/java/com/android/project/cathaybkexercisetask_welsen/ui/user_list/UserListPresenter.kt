@@ -1,29 +1,38 @@
 package com.android.project.cathaybkexercisetask_welsen.ui.user_list
 
-import android.util.Log
-import com.android.project.cathaybkexercisetask_welsen.data.model.UserListModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.rxjava3.cachedIn
+import androidx.paging.rxjava3.flowable
 import com.android.project.cathaybkexercisetask_welsen.data.repository.GithubServiceRepository
-import com.android.project.cathaybkexercisetask_welsen.data.repository.IGithubServiceRepository
 import javax.inject.Inject
 
 
 class UserListPresenter @Inject constructor(
     private val githubServiceRepository: GithubServiceRepository
-) : UserListContract.IUserListPresenter {
+) : ViewModel(), UserListContract.IUserListPresenter {
 
     override fun getUserList(
         startFrom: Int,
         perPage: Int,
         view: UserListContract.IUserListView
     ) {
-        githubServiceRepository.getUserList(
-            startFrom = startFrom,
-            perPage = perPage,
-            userListCallback = object : IGithubServiceRepository.UserListCallback {
-                override fun onGetResult(list: List<UserListModel>) {
-                    Log.d("TestData", "success")
-                    view.onGetUserList(userList = list)
+        view.onGetUserList(
+            userList = Pager(
+                config = PagingConfig(
+                    pageSize = 20,
+                    enablePlaceholders = false,
+                    initialLoadSize = 20,
+                    prefetchDistance = 5
+                ),
+                pagingSourceFactory = {
+                    UserListPagingSource(
+                        startFrom = startFrom,
+                        githubServiceRepository = githubServiceRepository
+                    )
                 }
-            })
+            ).flowable.cachedIn(viewModelScope))
     }
 }

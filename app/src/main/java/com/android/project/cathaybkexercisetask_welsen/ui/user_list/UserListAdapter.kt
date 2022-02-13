@@ -3,14 +3,14 @@ package com.android.project.cathaybkexercisetask_welsen.ui.user_list
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.android.project.cathaybkexercisetask_welsen.data.model.UserListModel
 import com.android.project.cathaybkexercisetask_welsen.databinding.VhUserListBinding
 import com.bumptech.glide.Glide
 
-class UserListAdapter : ListAdapter<UserListModel, UserListAdapter.UserListViewHolder>(DiffCallBack()) {
+class UserListAdapter : PagingDataAdapter<UserListModel, UserListAdapter.UserListViewHolder>(DiffCallBack()) {
 
     var listener: ((String) -> Unit)? = null
 
