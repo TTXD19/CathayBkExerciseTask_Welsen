@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.*
+import androidx.paging.LoadState
 import androidx.paging.PagingData
 import com.android.project.cathaybkexercisetask_welsen.R
 import com.android.project.cathaybkexercisetask_welsen.data.model.UserListModel
@@ -39,6 +41,7 @@ class UserListFragment : Fragment(), UserListContract.IUserListView {
         super.onViewCreated(view, savedInstanceState)
         userListPresenter.getUserList(startFrom = 0, perPage = 20, view = this)
         initRecyclerView()
+        initBtnRetry()
     }
 
     override fun onGetUserList(userList: Flowable<PagingData<UserListModel>>) {
@@ -55,6 +58,45 @@ class UserListFragment : Fragment(), UserListContract.IUserListView {
     private fun initRecyclerView() {
         binding.recyclerViewUserList
             .apply { userListAdapter.listener = { userName -> navigateToUserDetail(name = userName) } }
-            .apply { adapter = userListAdapter.withLoadStateFooter(UserListLoadStateAdapter { userListAdapter.retry() }) }
+            .apply {
+                userListAdapter.addLoadStateListener {
+                    when (it.source.refresh) {
+                        is LoadState.NotLoading -> {
+                            updateLoadingVisibility(isVisible = false)
+                            updateErrorMessageVisibility(isVisible = false)
+                            updateBtnRetryVisibility(isVisible = false)
+                        }
+                        is LoadState.Loading -> {
+                            updateLoadingVisibility(isVisible = true)
+                            updateErrorMessageVisibility(isVisible = false)
+                            updateBtnRetryVisibility(isVisible = false)
+                        }
+                        is LoadState.Error -> {
+                            updateLoadingVisibility(isVisible = false)
+                            updateErrorMessageVisibility(isVisible = true)
+                            updateBtnRetryVisibility(isVisible = true)
+                        }
+                    }
+                }
+            }
+            .apply {
+                adapter = userListAdapter.withLoadStateFooter(UserListLoadStateAdapter { userListAdapter.retry() })
+            }
+    }
+
+    private fun updateLoadingVisibility(isVisible: Boolean) {
+        binding.progressBar.isVisible = isVisible
+    }
+
+    private fun updateErrorMessageVisibility(isVisible: Boolean) {
+        binding.tvErrorMessage.isVisible = isVisible
+    }
+
+    private fun initBtnRetry() {
+        binding.btnRetry.setOnClickListener { userListAdapter.refresh() }
+    }
+
+    private fun updateBtnRetryVisibility(isVisible: Boolean) {
+        binding.btnRetry.isVisible = isVisible
     }
 }
