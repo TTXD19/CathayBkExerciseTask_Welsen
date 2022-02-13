@@ -6,9 +6,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
+import androidx.core.os.bundleOf
+import androidx.fragment.app.add
+import androidx.fragment.app.commit
+import com.android.project.cathaybkexercisetask_welsen.R
 import com.android.project.cathaybkexercisetask_welsen.data.model.UserListModel
 import com.android.project.cathaybkexercisetask_welsen.databinding.FragmentUserListBinding
+import com.android.project.cathaybkexercisetask_welsen.ui.user_detail.UserDetailFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -38,8 +42,17 @@ class UserListFragment : Fragment(), UserListContract.IUserListView {
 
     override fun onGetUserList(userList: List<UserListModel>) {
         binding.recyclerViewUserList
+            .apply { userListAdapter.listener = { userName -> navigateToUserDetail(name = userName) } }
             .apply { adapter = userListAdapter }
             .also { userListAdapter.submitList(userList) }
         Log.d("TestData", "successUI")
+    }
+
+    private fun navigateToUserDetail(name: String) {
+        Log.d("TestData", "Change")
+        parentFragmentManager.commit {
+            setReorderingAllowed(true)
+            add<UserDetailFragment>(R.id.fl_main, args = bundleOf("userName" to name))
+        }
     }
 }

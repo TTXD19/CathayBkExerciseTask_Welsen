@@ -12,6 +12,8 @@ import com.bumptech.glide.Glide
 
 class UserListAdapter : ListAdapter<UserListModel, UserListAdapter.UserListViewHolder>(DiffCallBack()) {
 
+    var listener: ((String) -> Unit)? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserListViewHolder {
         return UserListViewHolder(
             VhUserListBinding.inflate(
@@ -29,9 +31,13 @@ class UserListAdapter : ListAdapter<UserListModel, UserListAdapter.UserListViewH
 
     inner class UserListViewHolder(private val binding: VhUserListBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(model: UserListModel) {
+
+            val userName = model.userName ?: ""
+
             binding.tvUserName.text = model.userName
             binding.cardViewStaff.isVisible = model.isUserSiteAdmin()
             Glide.with(binding.root.context).load(model.userImageUrl).into(binding.imageUser)
+            itemView.setOnClickListener { listener?.invoke(userName) }
         }
     }
 
