@@ -4,4 +4,6 @@
     <string name="users">users</string>
     <string name="github_users">GitHub Users</string>
     <string name="staff">STAFF</string>
+    <string name="retry">Retry</string>
+    <string name="error_loading">Oops, we got some problem</string>
 </resources>

@@ -55,6 +55,6 @@ class UserListFragment : Fragment(), UserListContract.IUserListView {
     private fun initRecyclerView() {
         binding.recyclerViewUserList
             .apply { userListAdapter.listener = { userName -> navigateToUserDetail(name = userName) } }
-            .apply { adapter = userListAdapter }
+            .apply { adapter = userListAdapter.withLoadStateFooter(UserListLoadStateAdapter { userListAdapter.retry() }) }
     }
 }
