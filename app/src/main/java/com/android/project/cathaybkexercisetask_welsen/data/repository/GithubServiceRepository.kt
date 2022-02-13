@@ -1,6 +1,7 @@
 package com.android.project.cathaybkexercisetask_welsen.data.repository
 
 import com.android.project.cathaybkexercisetask_welsen.data.api.GithubRemoteDataSource
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import javax.inject.Inject
 
@@ -12,8 +13,8 @@ class GithubServiceRepository @Inject constructor(
         perPage: Int,
         userListCallback: IGithubServiceRepository.UserListCallback
     ) {
-        githubRemoteDataSource.getUserData(startFrom = startFrom, perPage = perPage).subscribeBy {
-            userListCallback.onGetResult(list = it)
-        }
+        githubRemoteDataSource.getUserData(startFrom = startFrom, perPage = perPage)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy { userListCallback.onGetResult(list = it) }
     }
 }

@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import com.android.project.cathaybkexercisetask_welsen.data.model.UserListModel
 import com.android.project.cathaybkexercisetask_welsen.databinding.FragmentUserListBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,6 +19,8 @@ class UserListFragment : Fragment(), UserListContract.IUserListView {
 
     @Inject
     lateinit var userListPresenter: UserListPresenter
+
+    private val userListAdapter: UserListAdapter by lazy { UserListAdapter() }
 
 
     override fun onCreateView(
@@ -34,6 +37,9 @@ class UserListFragment : Fragment(), UserListContract.IUserListView {
     }
 
     override fun onGetUserList(userList: List<UserListModel>) {
+        binding.recyclerViewUserList
+            .apply { adapter = userListAdapter }
+            .also { userListAdapter.submitList(userList) }
         Log.d("TestData", "successUI")
     }
 }

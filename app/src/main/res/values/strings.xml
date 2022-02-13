@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">CathayBkExerciseTask_Welsen</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="users">users</string>
+    <string name="github_users">GitHub Users</string>
+    <string name="staff">STAFF</string>
 </resources>
