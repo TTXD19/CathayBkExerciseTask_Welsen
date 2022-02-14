@@ -33,7 +33,6 @@ object NetworkModule {
                 val original = chain.request()
                 val requestBuilder = original.newBuilder()
                     .header("accept", "application/vnd.github.v3+json")
-                    .addHeader("Authorization", "token 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")
                 val request = requestBuilder.build()
                 chain.proceed(request)
             }
