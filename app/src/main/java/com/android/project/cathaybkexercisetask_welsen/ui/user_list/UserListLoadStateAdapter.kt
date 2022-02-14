@@ -8,9 +8,10 @@ import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.android.project.cathaybkexercisetask_welsen.databinding.VhUserListLoadStateBinding
 
-class UserListLoadStateAdapter(
-    val retry: () -> Unit
-) : LoadStateAdapter<UserListLoadStateAdapter.LoadStateViewHolder>() {
+class UserListLoadStateAdapter(private val retryListener: (() -> Unit)) :
+    LoadStateAdapter<UserListLoadStateAdapter.LoadStateViewHolder>() {
+
+    // region Override implementation
 
     override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState): LoadStateViewHolder {
         return LoadStateViewHolder(
@@ -25,6 +26,10 @@ class UserListLoadStateAdapter(
     override fun onBindViewHolder(holder: LoadStateViewHolder, loadState: LoadState) {
         holder.bind(loadState)
     }
+
+    // endregion
+
+    // region View holder
 
     inner class LoadStateViewHolder(private val binding: VhUserListLoadStateBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -47,8 +52,10 @@ class UserListLoadStateAdapter(
                 }
             }
             binding.btnRetry.setOnClickListener {
-                retry.invoke()
+                retryListener.invoke()
             }
         }
     }
+
+    // endregion
 }

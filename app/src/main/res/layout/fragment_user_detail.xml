@@ -10,10 +10,10 @@
 
     <ImageView
         android:id="@+id/imageClose"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:importantForAccessibility="no"
-        android:layout_margin="30dp"
+        android:layout_margin="20dp"
         android:src="@drawable/ic_close"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -192,6 +192,5 @@
             app:layout_constraintTop_toTopOf="@+id/imageLink"
             tools:ignore="SpUsage"
             tools:text="link" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

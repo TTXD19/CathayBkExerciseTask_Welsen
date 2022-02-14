@@ -11,8 +11,10 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
+    // View Binding
     private lateinit var binding: ActivityMainBinding
 
+    // region Life cycle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,10 +24,16 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null) showUserListFragment()
     }
 
+    // endregion
+
+    // region - View Update
+
     private fun showUserListFragment() {
         supportFragmentManager.commit {
             setReorderingAllowed(true)
             add<UserListFragment>(R.id.fl_main)
         }
     }
+
+    // endregion
 }

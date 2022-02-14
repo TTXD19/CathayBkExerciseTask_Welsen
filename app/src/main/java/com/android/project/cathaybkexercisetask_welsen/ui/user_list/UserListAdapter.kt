@@ -12,7 +12,25 @@ import com.bumptech.glide.Glide
 
 class UserListAdapter : PagingDataAdapter<UserListModel, UserListAdapter.UserListViewHolder>(DiffCallBack()) {
 
+    // Listener
     var listener: ((String) -> Unit)? = null
+
+    // region Diff Callback
+
+    class DiffCallBack : DiffUtil.ItemCallback<UserListModel>() {
+        override fun areItemsTheSame(oldItem: UserListModel, newItem: UserListModel): Boolean {
+            return oldItem == newItem
+        }
+
+        override fun areContentsTheSame(oldItem: UserListModel, newItem: UserListModel): Boolean {
+            return oldItem.userId == newItem.userId
+        }
+
+    }
+
+    // endregion
+
+    // region Override implementation
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserListViewHolder {
         return UserListViewHolder(
@@ -28,6 +46,9 @@ class UserListAdapter : PagingDataAdapter<UserListModel, UserListAdapter.UserLis
         getItem(position)?.also { holder.bind(model = it) }
     }
 
+    // endregion
+
+    // region View holder
 
     inner class UserListViewHolder(private val binding: VhUserListBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(model: UserListModel) {
@@ -41,15 +62,5 @@ class UserListAdapter : PagingDataAdapter<UserListModel, UserListAdapter.UserLis
         }
     }
 
-    class DiffCallBack : DiffUtil.ItemCallback<UserListModel>() {
-        override fun areItemsTheSame(oldItem: UserListModel, newItem: UserListModel): Boolean {
-            return oldItem == newItem
-        }
-
-        override fun areContentsTheSame(oldItem: UserListModel, newItem: UserListModel): Boolean {
-            return oldItem.userId == newItem.userId
-        }
-
-    }
-
+    // endregion
 }

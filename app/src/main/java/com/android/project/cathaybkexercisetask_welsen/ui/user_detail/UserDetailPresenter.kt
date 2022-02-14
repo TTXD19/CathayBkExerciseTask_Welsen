@@ -9,6 +9,9 @@ import javax.inject.Inject
 class UserDetailPresenter @Inject constructor(
     private val githubServiceRepository: GithubServiceRepository
 ) : UserDetailContract.IUserDetailPresenter {
+
+    // region - Update View Implementation
+
     override fun getUserDetail(userName: String, view: UserDetailContract.IUserDetailView) {
         githubServiceRepository.getUserDetail(
             userName = userName,
@@ -19,4 +22,6 @@ class UserDetailPresenter @Inject constructor(
                 }
             })
     }
+
+    // endregion
 }

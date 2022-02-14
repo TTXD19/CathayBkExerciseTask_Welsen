@@ -11,6 +11,8 @@ class UserListPagingSource(
     private val githubServiceRepository: GithubServiceRepository
 ) : RxPagingSource<Int, UserListModel>() {
 
+    // region Override implementation
+
     override fun getRefreshKey(state: PagingState<Int, UserListModel>): Int? = null
 
     override fun loadSingle(params: LoadParams<Int>): Single<LoadResult<Int, UserListModel>> {
@@ -20,6 +22,10 @@ class UserListPagingSource(
             .onErrorReturn { LoadResult.Error(it) }
     }
 
+    // endregion
+
+    // region View - Load Result Mapping
+
     private fun toLoadResult(key: Int, userList: List<UserListModel>): LoadResult<Int, UserListModel> {
         val nextKey = userList.lastOrNull()?.userId?.toInt() ?: key
         return LoadResult.Page(
@@ -28,5 +34,8 @@ class UserListPagingSource(
             nextKey = nextKey
         )
     }
+
+    // endregion
+
 
 }

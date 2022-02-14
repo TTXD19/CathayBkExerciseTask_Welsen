@@ -16,12 +16,17 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class UserDetailFragment : DialogFragment(), UserDetailContract.IUserDetailView {
 
+    // View Binding
     private lateinit var binding: FragmentUserDetailBinding
 
+    // Presenter
     @Inject
     lateinit var userDetailPresenter: UserDetailPresenter
 
+    // Data Key
     private var userName: String? = null
+
+    // region Life cycle
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,6 +45,10 @@ class UserDetailFragment : DialogFragment(), UserDetailContract.IUserDetailView 
         initCloseButton()
     }
 
+    // endregion
+
+    // region - View Init
+
     private fun initUserData() {
         userName?.also { userDetailPresenter.getUserDetail(userName = it, view = this) }
     }
@@ -52,6 +61,16 @@ class UserDetailFragment : DialogFragment(), UserDetailContract.IUserDetailView 
         }
     }
 
+    private fun initBtnRetry() {
+        binding.btnRetry.setOnClickListener {
+            updateLoadingVisibility(isVisible = true)
+            initUserData()
+        }
+    }
+
+    // endregion
+
+    // region - View Update
 
     override fun onGetUserDetail(userDetail: UserDetailModel) {
         binding.tvUserRealName.text = userDetail.userRealName
@@ -75,6 +94,10 @@ class UserDetailFragment : DialogFragment(), UserDetailContract.IUserDetailView 
         updateBtnRetryVisibility(isVisible = true)
     }
 
+    // endregion
+
+    // region - View Visibility
+
     private fun updateUserDetailsVisibility(isVisible: Boolean) {
         binding.clUserDetails.isVisible = isVisible
     }
@@ -87,14 +110,9 @@ class UserDetailFragment : DialogFragment(), UserDetailContract.IUserDetailView 
         binding.tvErrorMessage.isVisible = isVisible
     }
 
-    private fun initBtnRetry() {
-        binding.btnRetry.setOnClickListener {
-            updateLoadingVisibility(isVisible = true)
-            initUserData()
-        }
-    }
-
     private fun updateBtnRetryVisibility(isVisible: Boolean) {
         binding.btnRetry.isVisible = isVisible
     }
+
+    // endregion
 }

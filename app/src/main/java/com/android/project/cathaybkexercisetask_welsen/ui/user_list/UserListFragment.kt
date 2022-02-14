@@ -21,13 +21,17 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class UserListFragment : Fragment(), UserListContract.IUserListView {
 
+    // View Binding
     private lateinit var binding: FragmentUserListBinding
 
+    // Presenter
     @Inject
     lateinit var userListPresenter: UserListPresenter
 
+    // Adapter
     private val userListAdapter: UserListAdapter by lazy { UserListAdapter() }
 
+    // region Life cycle
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,16 +48,17 @@ class UserListFragment : Fragment(), UserListContract.IUserListView {
         initBtnRetry()
     }
 
+    // endregion
+
+    // region View - User List
+
     override fun onGetUserList(userList: Flowable<PagingData<UserListModel>>) {
         userList.subscribeBy { userListAdapter.submitData(lifecycle, it) }
     }
 
-    private fun navigateToUserDetail(name: String) {
-        parentFragmentManager.commit {
-            setReorderingAllowed(true)
-            add<UserDetailFragment>(R.id.fl_main, args = bundleOf("userName" to name))
-        }
-    }
+    // endregion
+
+    // region View - View Init
 
     private fun initRecyclerView() {
         binding.recyclerViewUserList
@@ -84,6 +89,21 @@ class UserListFragment : Fragment(), UserListContract.IUserListView {
             }
     }
 
+    private fun initBtnRetry() {
+        binding.btnRetry.setOnClickListener { userListAdapter.refresh() }
+    }
+
+    private fun navigateToUserDetail(name: String) {
+        parentFragmentManager.commit {
+            setReorderingAllowed(true)
+            add<UserDetailFragment>(R.id.fl_main, args = bundleOf("userName" to name))
+        }
+    }
+
+    // endregion
+
+    // region View - View Visibility
+
     private fun updateLoadingVisibility(isVisible: Boolean) {
         binding.progressBar.isVisible = isVisible
     }
@@ -92,11 +112,9 @@ class UserListFragment : Fragment(), UserListContract.IUserListView {
         binding.tvErrorMessage.isVisible = isVisible
     }
 
-    private fun initBtnRetry() {
-        binding.btnRetry.setOnClickListener { userListAdapter.refresh() }
-    }
-
     private fun updateBtnRetryVisibility(isVisible: Boolean) {
         binding.btnRetry.isVisible = isVisible
     }
+
+    // endregion
 }

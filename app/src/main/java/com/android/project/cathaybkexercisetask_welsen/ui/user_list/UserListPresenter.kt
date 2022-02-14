@@ -14,6 +14,8 @@ class UserListPresenter @Inject constructor(
     private val githubServiceRepository: GithubServiceRepository
 ) : ViewModel(), UserListContract.IUserListPresenter {
 
+    // region - Update View Implementation
+
     override fun getUserList(
         startFrom: Int,
         perPage: Int,
@@ -35,4 +37,6 @@ class UserListPresenter @Inject constructor(
                 }
             ).flowable.cachedIn(viewModelScope))
     }
+
+    // endregion
 }
