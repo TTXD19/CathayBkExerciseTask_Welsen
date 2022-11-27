@@ -7,6 +7,7 @@ import androidx.fragment.app.commit
 import com.android.project.cathaybkexercisetask_welsen.databinding.ActivityMainBinding
 import com.android.project.cathaybkexercisetask_welsen.ui.user_list.UserListFragment
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -18,8 +19,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-            .apply { setContentView(root) }
+        binding = ActivityMainBinding.inflate(layoutInflater).apply { setContentView(root) }
 
         if (savedInstanceState == null) showUserListFragment()
     }
@@ -29,10 +29,7 @@ class MainActivity : AppCompatActivity() {
     // region - View Update
 
     private fun showUserListFragment() {
-        supportFragmentManager.commit {
-            setReorderingAllowed(true)
-            add<UserListFragment>(R.id.fl_main)
-        }
+        supportFragmentManager.beginTransaction().add(R.id.fl_main, UserListFragment.newInstance()).commit()
     }
 
     // endregion

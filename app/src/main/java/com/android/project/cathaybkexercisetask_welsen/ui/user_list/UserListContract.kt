@@ -10,7 +10,7 @@ class UserListContract {
     // region - Data
 
     interface IUserListPresenter {
-        fun getUserList(startFrom: Int, perPage: Int, view: IUserListView)
+        fun getUserList(startFrom: Int, perPage: Int)
         fun getUserList(context: Context)
     }
 

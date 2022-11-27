@@ -24,9 +24,13 @@ class UserListFragment : Fragment(), UserListContract.IUserListView {
     // View Binding
     private lateinit var binding: FragmentUserListBinding
 
-    // Presenter
-    @Inject
-    lateinit var userListPresenter: UserListPresenter
+    @Inject lateinit var userListPresenter: UserListContract.IUserListPresenter
+
+    companion object {
+        fun newInstance(): UserListFragment {
+            return UserListFragment()
+        }
+    }
 
     // Adapter
     private val userListAdapter: UserListAdapter by lazy { UserListAdapter() }
@@ -34,17 +38,13 @@ class UserListFragment : Fragment(), UserListContract.IUserListView {
     // region Life cycle
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View = FragmentUserListBinding.inflate(layoutInflater, container, false)
-        .also { binding = it }
-        .root
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View = FragmentUserListBinding.inflate(layoutInflater, container, false).also { binding = it }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        userListPresenter.getUserList(startFrom = 0, perPage = 20, view = this)
-        userListPresenter.getUserList(requireContext())
+        userListPresenter.getUserList(startFrom = 0, perPage = 20)
+//        userListPresenter.getUserList(requireContext())
         initRecyclerView()
         initBtnRetry()
     }
@@ -62,32 +62,29 @@ class UserListFragment : Fragment(), UserListContract.IUserListView {
     // region View - View Init
 
     private fun initRecyclerView() {
-        binding.recyclerViewUserList
-            .apply { userListAdapter.listener = { userName -> navigateToUserDetail(name = userName) } }
-            .apply {
-                userListAdapter.addLoadStateListener {
-                    when (it.source.refresh) {
-                        is LoadState.NotLoading -> {
-                            updateLoadingVisibility(isVisible = false)
-                            updateErrorMessageVisibility(isVisible = false)
-                            updateBtnRetryVisibility(isVisible = false)
-                        }
-                        is LoadState.Loading -> {
-                            updateLoadingVisibility(isVisible = true)
-                            updateErrorMessageVisibility(isVisible = false)
-                            updateBtnRetryVisibility(isVisible = false)
-                        }
-                        is LoadState.Error -> {
-                            updateLoadingVisibility(isVisible = false)
-                            updateErrorMessageVisibility(isVisible = true)
-                            updateBtnRetryVisibility(isVisible = true)
-                        }
+        binding.recyclerViewUserList.apply { userListAdapter.listener = { userName -> navigateToUserDetail(name = userName) } }.apply {
+            userListAdapter.addLoadStateListener {
+                when (it.source.refresh) {
+                    is LoadState.NotLoading -> {
+                        updateLoadingVisibility(isVisible = false)
+                        updateErrorMessageVisibility(isVisible = false)
+                        updateBtnRetryVisibility(isVisible = false)
+                    }
+                    is LoadState.Loading -> {
+                        updateLoadingVisibility(isVisible = true)
+                        updateErrorMessageVisibility(isVisible = false)
+                        updateBtnRetryVisibility(isVisible = false)
+                    }
+                    is LoadState.Error -> {
+                        updateLoadingVisibility(isVisible = false)
+                        updateErrorMessageVisibility(isVisible = true)
+                        updateBtnRetryVisibility(isVisible = true)
                     }
                 }
             }
-            .apply {
-                adapter = userListAdapter.withLoadStateFooter(UserListLoadStateAdapter { userListAdapter.retry() })
-            }
+        }.apply {
+            adapter = userListAdapter.withLoadStateFooter(UserListLoadStateAdapter { userListAdapter.retry() })
+        }
     }
 
     private fun initBtnRetry() {

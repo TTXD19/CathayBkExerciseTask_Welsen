@@ -3,12 +3,12 @@ package com.android.project.cathaybkexercisetask_welsen.ui.user_list
 import androidx.paging.PagingState
 import androidx.paging.rxjava3.RxPagingSource
 import com.android.project.cathaybkexercisetask_welsen.data.model.UserListModel
-import com.android.project.cathaybkexercisetask_welsen.data.repository.GithubServiceRepository
+import com.android.project.cathaybkexercisetask_welsen.data.repository.IGithubServiceRepository
 import io.reactivex.rxjava3.core.Single
 
 class UserListPagingSource(
     private val startFrom: Int,
-    private val githubServiceRepository: GithubServiceRepository
+    private val githubServiceRepository: IGithubServiceRepository
 ) : RxPagingSource<Int, UserListModel>() {
 
     // region Override implementation
