@@ -7,7 +7,7 @@ class UserDetailContract {
     // region - Data
 
     interface IUserDetailPresenter {
-        fun getUserDetail(userName: String, view: IUserDetailView)
+        fun getUserDetail(userName: String)
     }
 
     // endregion

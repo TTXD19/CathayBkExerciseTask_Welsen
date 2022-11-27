@@ -21,7 +21,7 @@ class UserDetailFragment : DialogFragment(), UserDetailContract.IUserDetailView 
 
     // Presenter
     @Inject
-    lateinit var userDetailPresenter: UserDetailPresenter
+    lateinit var userDetailPresenter: UserDetailContract.IUserDetailPresenter
 
     // Data Key
     private var userName: String? = null
@@ -39,7 +39,7 @@ class UserDetailFragment : DialogFragment(), UserDetailContract.IUserDetailView 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         userName = requireArguments().getString("userName")
-        updateLoadingVisibility(isVisible = true)
+        updateLoadingVisibility(true)
         initUserData()
         initBtnRetry()
         initCloseButton()
@@ -50,7 +50,7 @@ class UserDetailFragment : DialogFragment(), UserDetailContract.IUserDetailView 
     // region - View Init
 
     private fun initUserData() {
-        userName?.also { userDetailPresenter.getUserDetail(userName = it, view = this) }
+        userName?.also { userDetailPresenter.getUserDetail(it) }
     }
 
     private fun initCloseButton() {

@@ -7,12 +7,13 @@ import com.android.project.cathaybkexercisetask_welsen.data.repository.IGithubSe
 import javax.inject.Inject
 
 class UserDetailPresenter @Inject constructor(
-    private val githubServiceRepository: GithubServiceRepository
+    private val githubServiceRepository: GithubServiceRepository,
+    private val view: UserDetailContract.IUserDetailView
 ) : UserDetailContract.IUserDetailPresenter {
 
     // region - Update View Implementation
 
-    override fun getUserDetail(userName: String, view: UserDetailContract.IUserDetailView) {
+    override fun getUserDetail(userName: String) {
         githubServiceRepository.getUserDetail(
             userName = userName,
             object : IGithubServiceRepository.UserDetailCallback {
