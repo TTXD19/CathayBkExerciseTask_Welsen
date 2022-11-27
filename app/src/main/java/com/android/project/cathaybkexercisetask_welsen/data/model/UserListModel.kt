@@ -10,3 +10,7 @@ data class UserListModel(
 ) {
     fun isUserSiteAdmin(): Boolean = userSiteAdmin == true
 }
+
+data class Response(
+    val dataList: List<UserListModel>
+)

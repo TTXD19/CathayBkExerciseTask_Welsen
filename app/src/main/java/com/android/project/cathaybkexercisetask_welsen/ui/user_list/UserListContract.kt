@@ -1,5 +1,6 @@
 package com.android.project.cathaybkexercisetask_welsen.ui.user_list
 
+import android.content.Context
 import androidx.paging.PagingData
 import com.android.project.cathaybkexercisetask_welsen.data.model.UserListModel
 import io.reactivex.rxjava3.core.Flowable
@@ -10,6 +11,7 @@ class UserListContract {
 
     interface IUserListPresenter {
         fun getUserList(startFrom: Int, perPage: Int, view: IUserListView)
+        fun getUserList(context: Context)
     }
 
     // endregion

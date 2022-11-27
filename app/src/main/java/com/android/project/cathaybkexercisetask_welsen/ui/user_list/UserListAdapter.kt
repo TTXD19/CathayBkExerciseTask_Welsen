@@ -10,7 +10,7 @@ import com.android.project.cathaybkexercisetask_welsen.data.model.UserListModel
 import com.android.project.cathaybkexercisetask_welsen.databinding.VhUserListBinding
 import com.bumptech.glide.Glide
 
-class UserListAdapter : PagingDataAdapter<UserListModel, UserListAdapter.UserListViewHolder>(DiffCallBack()) {
+class UserListAdapter : PagingDataAdapter<UserListModel, UserListViewHolder>(DiffCallBack()) {
 
     // Listener
     var listener: ((String) -> Unit)? = null
@@ -43,24 +43,20 @@ class UserListAdapter : PagingDataAdapter<UserListModel, UserListAdapter.UserLis
     }
 
     override fun onBindViewHolder(holder: UserListViewHolder, position: Int) {
-        getItem(position)?.also { holder.bind(model = it) }
+        getItem(position)?.also { holder.bind(model = it, listener) }
     }
 
     // endregion
+}
 
-    // region View holder
+class UserListViewHolder(private val binding: VhUserListBinding) : RecyclerView.ViewHolder(binding.root) {
+    fun bind(model: UserListModel, listener: ((String) -> Unit)?) {
 
-    inner class UserListViewHolder(private val binding: VhUserListBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(model: UserListModel) {
+        val userName = model.userName ?: ""
 
-            val userName = model.userName ?: ""
-
-            binding.tvUserName.text = model.userName
-            binding.cardViewStaff.isVisible = model.isUserSiteAdmin()
-            Glide.with(binding.root.context).load(model.userImageUrl).into(binding.imageUser)
-            itemView.setOnClickListener { listener?.invoke(userName) }
-        }
+        binding.tvUserName.text = model.userName
+        binding.cardViewStaff.isVisible = model.isUserSiteAdmin()
+        Glide.with(binding.root.context).load(model.userImageUrl).into(binding.imageUser)
+        itemView.setOnClickListener { listener?.invoke(userName) }
     }
-
-    // endregion
 }

@@ -43,7 +43,8 @@ class UserListFragment : Fragment(), UserListContract.IUserListView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        userListPresenter.getUserList(startFrom = 0, perPage = 20, view = this)
+//        userListPresenter.getUserList(startFrom = 0, perPage = 20, view = this)
+        userListPresenter.getUserList(requireContext())
         initRecyclerView()
         initBtnRetry()
     }
