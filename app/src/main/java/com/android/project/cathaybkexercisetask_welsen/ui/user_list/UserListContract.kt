@@ -20,6 +20,7 @@ class UserListContract {
 
     interface IUserListView {
         fun onGetUserList(userList: Flowable<PagingData<UserListModel>>)
+        fun onGetUserList(userList: List<UserListModel>)
     }
 
     // endregion

@@ -14,9 +14,8 @@ import javax.inject.Inject
 
 
 class UserListPresenter @Inject constructor(
-    private val githubServiceRepository: GithubServiceRepository,
-    private val view: UserListContract.IUserListView
-    ) : ViewModel(), UserListContract.IUserListPresenter {
+    private val githubServiceRepository: GithubServiceRepository, private val view: UserListContract.IUserListView
+) : ViewModel(), UserListContract.IUserListPresenter {
 
     // region - Update View Implementation
 
@@ -36,6 +35,7 @@ class UserListPresenter @Inject constructor(
         val localData = LocalData()
         val data = localData.getDataFromAssets(context, "gitUserListMockData.json")
         val test = localData.getDataFromAssetsTest(context, "test.json")
+        view.onGetUserList(data?.dataList ?: listOf())
         Log.d("testData", data.toString())
     }
 

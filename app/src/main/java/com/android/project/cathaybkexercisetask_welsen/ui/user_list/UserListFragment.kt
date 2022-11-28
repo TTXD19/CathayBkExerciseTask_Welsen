@@ -24,7 +24,8 @@ class UserListFragment : Fragment(), UserListContract.IUserListView {
     // View Binding
     private lateinit var binding: FragmentUserListBinding
 
-    @Inject lateinit var userListPresenter: UserListContract.IUserListPresenter
+    @Inject
+    lateinit var userListPresenter: UserListContract.IUserListPresenter
 
     companion object {
         fun newInstance(): UserListFragment {
@@ -34,6 +35,7 @@ class UserListFragment : Fragment(), UserListContract.IUserListView {
 
     // Adapter
     private val userListAdapter: UserListAdapter by lazy { UserListAdapter() }
+    private val userListRegularAdapter: UserListRegularAdapter by lazy { UserListRegularAdapter() }
 
     // region Life cycle
 
@@ -43,10 +45,10 @@ class UserListFragment : Fragment(), UserListContract.IUserListView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        userListPresenter.getUserList(startFrom = 0, perPage = 20)
-//        userListPresenter.getUserList(requireContext())
-        initRecyclerView()
-        initBtnRetry()
+//        userListPresenter.getUserList(startFrom = 0, perPage = 20)
+        userListPresenter.getUserList(requireContext())
+//        initRecyclerView()
+//        initBtnRetry()
     }
 
     // endregion
@@ -55,6 +57,14 @@ class UserListFragment : Fragment(), UserListContract.IUserListView {
 
     override fun onGetUserList(userList: Flowable<PagingData<UserListModel>>) {
         userList.subscribeBy { userListAdapter.submitData(lifecycle, it) }
+    }
+
+    override fun onGetUserList(userList: List<UserListModel>) {
+        userListRegularAdapter.submitList(userList)
+        binding.recyclerViewUserList.adapter = userListRegularAdapter
+        updateLoadingVisibility(isVisible = false)
+        updateErrorMessageVisibility(isVisible = false)
+        updateBtnRetryVisibility(isVisible = false)
     }
 
     // endregion
