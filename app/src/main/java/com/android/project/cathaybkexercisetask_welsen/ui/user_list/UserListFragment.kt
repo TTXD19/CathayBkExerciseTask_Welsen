@@ -61,6 +61,7 @@ class UserListFragment : Fragment(), UserListContract.IUserListView {
 
     override fun onGetUserList(userList: List<UserListModel>) {
         userListRegularAdapter.submitList(userList)
+        userListRegularAdapter.listener = { userName -> navigateToUserDetail(name = userName) }
         binding.recyclerViewUserList.adapter = userListRegularAdapter
         updateLoadingVisibility(isVisible = false)
         updateErrorMessageVisibility(isVisible = false)
