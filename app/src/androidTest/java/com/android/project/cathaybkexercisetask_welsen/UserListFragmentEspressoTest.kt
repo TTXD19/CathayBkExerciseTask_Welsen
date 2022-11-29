@@ -19,7 +19,7 @@ class UserListFragmentEspressoTest {
 
     @Test
     fun testText() {
-        onView(withText("Hello World!!")).check(matches(isDisplayed()))
+        onView(withText("Hello world!")).check(matches(isDisplayed()))
     }
 
     @Test
